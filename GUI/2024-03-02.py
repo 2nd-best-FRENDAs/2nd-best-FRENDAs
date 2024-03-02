@@ -10,11 +10,7 @@ import numpy as np
 
 # Upload CSV file
 def upload_file():
-<<<<<<< HEAD
     st.header("upload files")
-=======
-    st.header("Upload files")
->>>>>>> main
     file = st.file_uploader('Upload CSV', type=['csv'])
     df = pd.read_csv(file)
     if df is not None:
@@ -24,55 +20,36 @@ def upload_file():
         st.session_state.df = df
         return df
     else:
-<<<<<<< HEAD
         st.error(f"An error occurred")
-=======
-        st.warning("Please upload a CSV file")
->>>>>>> main
         return None
         
 # Convert df file to SBML readable format
-def convert_to_sbml(df, filetype):
-<<<<<<< HEAD
-=======
-    """ 
-    df: .txt, .csv, biomodels url
-    filetype/file format: ant, sbml, or xml
+def convert_to_sbml():
+    st.header("Convert CSV to SBML")
     
-    Input the dataframe created upon loading the file and its syntax.
-    Convert the format to SBML if not already, so Tellurium can work with it.
-    Output declares whether file was successfully converted and loaded.
-    """
->>>>>>> main
-    model_content = df.to_csv(index=False)
-    if filetype=='antimony':
-        try:
-            model_sbml = te.antimonyToSBML(model_content)
-            model_load = te.loadSBMLModel(model_sbml)
-            st.success(f"Successfully converted file file from {filetype} to SBML and loaded.")
-        except Exception as e:
-<<<<<<< HEAD
-            st.error("Could not load file.", e)
-=======
-            st.error(f"Could not load file: {str(e)}")
-    elif filetype=='cellml':
-        try: 
-            model_load = te.cellmlToAntimony(model_content)
-            st.success(f"Successfully converted file file from {filetype} to SBML and loaded.")
-        except Exception as e:
-            st.error(f"Could not load file: {str(e)}")
->>>>>>> main
-    else: 
-        try:
-            model_load = te.loadSBMLModel(model_content)
-            st.success(f"Successfully loaded SBML file.")
-        except Exception as e:
-<<<<<<< HEAD
-            st.error("Could not load SBML file.", e)
-=======
-            st.error(f"Could not load file: {str(e)}")
->>>>>>> main
-    return model_load
+    if "df" in st.session_state:
+        df = st.session_state.df
+
+        if st.button("Convert"):
+            model_content = df.to_csv(index=False)
+            if filetype=='antimony':
+                try:
+                    model_sbml = te.antimonyToSBML(model_content)
+                    model_load = te.loadSBMLModel(model_sbml)
+                    st.success(f"Successfully converted file file from {filetype} to SBML and loaded.")
+                except Exception as e:
+                    st.error("Could not load file.", e)
+            else: 
+                try:
+                    model_load = te.loadSBMLModel(model_content)
+                    st.success(f"Successfully loaded SBML file.")
+                except Exception as e:
+                    st.error("Could not load SBML file.", e)
+            return model_load
+            st.success("Conversion successful!")
+
+    else:
+        st.write("Please upload a CSV file first.")
     
 # Function to generate plot
 def visualize_data():
@@ -128,38 +105,15 @@ def main():
     # Page 1 content
     if selected_tab == "Upload file": 
         upload_file()
-<<<<<<< HEAD
     
-=======
-        
-    # Page 2 content
->>>>>>> main
     elif selected_tab == "Convert to SBML":
-        st.header("Convert CSV to SBML")
-        st.subheader("Upload a CSV file first to convert it to SBML format.")
-        if st.session_state.df is not None:
-<<<<<<< HEAD
-            if st.button("Convert"):
-                convert_to_sbml(st.session_state.df)
-                st.success("Conversion successful!")
+        convert_to_sbml()
     
     # Page 2 content
     elif selected_tab == "Plot all":
         visualize_data()
 
     #page 3
-=======
-            filetype = st.selectbox("Select the format your file is in", ["antimony", "sbml", "cellml"])
-            if st.button("Convert and load model"):
-                convert_to_sbml(st.session_state.df, filetype)
-                st.success("Conversion successful!")
-    
-    # Page 3 content
-    elif selected_tab == "Plot all":
-        visualize_data()
-
-    # Page 4 content
->>>>>>> main
     elif selected_tab == "Plot selected":
         custom_plot()
         
