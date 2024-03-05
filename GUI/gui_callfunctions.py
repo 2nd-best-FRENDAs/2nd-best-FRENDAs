@@ -11,7 +11,7 @@ import base64
 from functions_to_import import load_model, simulate_model
 
 ### FUNCTIONS!!!!!!!!!
-def upload_model():
+def tab1_upload_model():
     st.header("upload your model here")
     # Selectbox to choose between "antimony" and "sbml"
     selected_option = st.selectbox("Select your model type", ["antimony", "sbml"])
@@ -39,7 +39,7 @@ def upload_model():
     else:
         st.write("Please upload a file")
 
-def solve_model():
+def tab2_solve_model():
     st.header("Tellurium/Roadrunner Modeling")
     st.subheader("Fill out information below to solve your model using tellurium")
 
@@ -89,7 +89,7 @@ def solve_model():
 
 ##### PLOTTING!!!!!!!!!!!!!!!!!!!
 # Function to generate and display plot
-def visualize_data():
+def tab3_plot_all():
     st.header("Plotting All Data")
     if "df" in st.session_state:
         df = st.session_state.df
@@ -101,15 +101,7 @@ def visualize_data():
     else:
         st.write("Load model first")
 
-# Function to generate plot with selected columns
-def generate_plot(df, x_column, y_columns):
-    fig = go.Figure()
-    for y_column in y_columns:
-        fig.add_trace(go.Scatter(x=df[x_column], y=df[y_column], mode='lines', name=y_column))
-    fig.update_layout(title='Customizable Plot', xaxis_title=x_column, yaxis_title='Value')
-    return fig
-
-def custom_plot():
+def tab4_plot_selected():
     st.header("Customizable Plot")
     if "df" in st.session_state:
         df = st.session_state.df
@@ -127,25 +119,16 @@ def custom_plot():
         title = st.text_input("Title", "Custom Plot")
         x_label = st.text_input("X-Axis Label", "X")
         y_label = st.text_input("Y-Axis Label", "Y")
-        
-        #st.write('Select Columns:')
-        #columns = df.columns.tolist()
-        #selected_columns = [st.checkbox(col, value=False) for col in columns]
-        
-        # Generate plot
-        #x_column = st.selectbox('Select X axis data:', options=columns)
-        #y_columns = [col for col, selected in zip(columns, selected_columns) if selected and col #!= x_column]
-        # Generate and display the plot      
+     
         if y_columns:
-            fig = generate_plot(df, x_column, y_columns)
+            fig = px.line(df, x_column, y_columns)
             fig.update_layout(title=title, xaxis_title=x_label, yaxis_title=y_label)
             st.plotly_chart(fig)
         else:
             st.write('No Y columns selected.')
-        # Print selected columns
-        #st.write('Selected Y Columns:', [col for col, selected in zip(columns, selected_columns) if selected and col != x_column])
     else:
         st.write("Load model first")
+
 
 
 
@@ -159,16 +142,16 @@ def main():
 
     # Page 1 content
     if selected_tab == "Upload model": 
-        upload_model()
+        tab1_upload_model()
 
     elif selected_tab == "Solve model":
-        solve_model()
+        tab2_solve_model()
 
     elif selected_tab == "Plot all":
-        visualize_data()
+        tab3_plot_all()
 
     elif selected_tab == "Plot selected":
-        custom_plot()
+        tab4_plot_selected()
         
 
 if __name__ == "__main__":
