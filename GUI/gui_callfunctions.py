@@ -42,32 +42,48 @@ def tab1_upload_model():
 def tab2_solve_model():
     st.header("Tellurium/Roadrunner Modeling")
     st.subheader("Fill out information below to solve your model using tellurium")
-
     # Time inputs
     t0 = st.number_input("Enter your starting time: t0", value=0)
     tf = st.number_input("Enter your final time: tf", value=0)
     steps = st.number_input("Enter the number of steps you want", value=0)
-
     # Button to trigger processing
-    if st.button("Solve Model"):
-        if "model_load" in st.session_state:
-            model_load = st.session_state.model_load
-            #selected_option = st.session_state.selected_option
-            try:
-                #file_content = uploaded_file.read()
-                #model_load = load_model(file_content, selected_option)
-                df = simulate_model(model_load, t0, tf, steps)
-                # returns result, df, species_names
-                if "df" in st.session_state:
-                    old_df = st.session_state.df
-                    df = pd.concat([old_df, df], ignore_index=True)
-                    
-                st.write(df.head())
-                st.session_state.df = df
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
+    solve_button = st.button("Solve Model")
+    if 'solve_button' not in st.session_state:
+        st.session_state.solve_button = False
+
+    #initializing variables
+    if 't0' not in st.session_state:
+        st.session_state.t0 = 0
+    if 'tf' not in st.session_state:
+        st.session_state.tf = 0
+    if 'steps' not in st.session_state:
+        st.session_state.steps = 0
+    # Check if any of the input variables has changed
+    if (st.session_state.t0 != t0 or st.session_state.tf != tf or st.session_state.steps != steps):
+        st.session_state.solve_button = False
+        #WHY IS THIS NOT WORKING??????????
+        df = None
+        st.session_state.pop('df', None)
+
+    if solve_button:
+        if not st.session_state.solve_button:
+            st.session_state.solve_button = True
+            # Store the current input variables in session state
+            st.session_state.t0 = t0
+            st.session_state.tf = tf
+            st.session_state.steps = steps
+            if "model_load" in st.session_state:
+                try:
+                    df = simulate_model(st.session_state.model_load, t0, tf, steps)
+                    st.write(df)
+                    st.session_state.df = df
+                except Exception as e:
+                    st.error(f"An error occurred: {e}")
+            else:
+                st.write("Load model first")
         else:
-            st.write("Load model first")
+            st.write(st.session_state.df)
+            st.write("model already solved!")
     
 
     # Button to download the DataFrame as a CSV file
@@ -79,7 +95,6 @@ def tab2_solve_model():
                 csv = df.to_csv(index=False)
                 b64 = base64.b64encode(csv.encode()).decode()  # Convert DataFrame to bytes
                 href = f'<a href="data:file/csv;base64,{b64}" download="solved_model.csv">Download CSV File</a>'
-                # ="solved_model:file/csv;base64,{b64}" download="solved_model.csv">Download CSV # File</a>'
                 st.markdown(href, unsafe_allow_html=True)
             except Exception as e:
                 st.error(f"An error occurred: {e}")
