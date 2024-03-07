@@ -16,21 +16,19 @@
 
 multi_enzyme_model.txt is a small metabolic model in antimony format
 
-
 This can be uploaded to on the GUI upload model tab.
 
-<img src="/png/model_load_tab_screenshot.png" align="center" width="600px"/>
+![load_model_tab](https://github.com/best-FRENDAs/2nd-best-FRENDAs/blob/main/pngs/model_load_tab_screenshot.png)
 
 On the solve model tab, the ODE model can be solved with a tellurium roadrunner function over a specified time interval and steps. This can be exported as a csv.
 
-<img src="model_solve_screenshot.png" align="center" width="600px"/>
-
+![solve_model_tab](https://github.com/best-FRENDAs/2nd-best-FRENDAs/blob/main/pngs/model_solve_screenshot.png)
 
 The solved model can be visualized on the plot all tab, which shows all metabolites on the graph. 
 
-<img src="model_visualize_all_screenshot.png" align="center" width="600px"/>
+![plot_all](https://github.com/best-FRENDAs/2nd-best-FRENDAs/blob/main/pngs/model_visualize_all_screenshot.png)
 
 A subset can also be visualized on the plot selected tab.
 
-<img scr="model_visualize_subset_screenshot.png" align="center" width="600px"/>
+![plot_selected](https://github.com/best-FRENDAs/2nd-best-FRENDAs/blob/main/pngs/model_visualize_subset_screenshot.png)
 
