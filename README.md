@@ -12,6 +12,20 @@
 
 2nd-best-FRENDAs can solve metabolic models ODEs for metabolite concentrations over time and produce visualizations. These can be adjusted to view metabolites of interest.
 
+## Creating the environment and starting up 2nd-best-FRENDA
+
+To create the virtual environment to run 2nd-best-FRENDA, execute the following line in the folder containing environment.yml (this only needs to be done once):
+
+    conda env create -f environment.yml
+
+Then, whenever you want to activate the environment, execute the following line:
+
+    conda activate 2nd-best-environment
+
+Finally, 2nd-best-FRENDA can be activated by executing the following line:
+
+    streamlit run gui_callfunctions.py
+
 ## Example:
 
 multi_enzyme_model.txt is a small metabolic model in antimony format
