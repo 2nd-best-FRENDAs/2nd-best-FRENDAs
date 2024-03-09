@@ -10,11 +10,12 @@ import tellurium as te
         # If file is in SBML, function will still load the model
 def load_model(file_content, selected_option): 
     """ 
-    file_name: .txt, .csv, biomodels website
-    selected_option: ant, sbml
+    file_content: .txt, .csv, biomodels website
+    selected_option: antimony, sbml
     
-    Input the file_name/path of the file, and its syntax.
-    Output declares whether file was successfully loaded or not
+    Input the file and its syntax/format.
+    Output converts to SBML format for modeling. 
+    Declares whether file was successfully loaded or not.
     """
     if selected_option=='antimony':
         try:
@@ -33,14 +34,24 @@ def load_model(file_content, selected_option):
 
 #solve model in tellurium
 def simulate_model(model_load, t0, t1, steps):
-    # simulate based on time interval and time steps
+    """
+    model_load: roadrunner file output from the load model function
+    t0: starting time
+    t1: final time (endpoint)
+    steps: how many timepoints between t0 and t1
+
+    Input is roadrunner/tellurium file, and interval over which simulation will run.
+    Outputs a dataframe used for plotting concentration vs. time.
+    """
     result = model_load.simulate(t0, t1, steps) 
     
-    # Convert to DataFrame
+    # Extract species names
     species_names = model_load.getFloatingSpeciesIds()
+    
+    # Convert to DataFrame and output to user
     columns = ['Time'] + [str(i) for i in species_names]
-    solved_df = pd.DataFrame(data=result, columns=columns)
-    #only returning one thing right now to integrate into gui
+    solved_df = pd.DataFrame(data=result, columns=columns) 
+        
     return solved_df
 
 #export csv
