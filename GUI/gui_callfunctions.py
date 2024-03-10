@@ -8,7 +8,7 @@ import tellurium as te
 import numpy as np
 import base64
 
-from functions_to_import import load_model, simulate_model
+from functions_to_import import load_model, simulate_model, titration_plot
 
 ### FUNCTIONS!!!!!!!!!
 def tab1_upload_model():
@@ -171,6 +171,69 @@ def tab4_plot_selected():
     else:
         st.write("Load model first")
 
+def tab5_plot_foldchange():
+    st.header("Plot species with selected fold change")
+    st.write("Please fill out information below. Then, a specified plot species with a fold change greater than specified will appear.")
+    st.divider()
+    if "df" in st.session_state:
+        df = st.session_state.df
+        t0 = st.session_state.t0
+        tf = st.session_state.tf
+        input_foldchange = st.number_input("Enter the foldchange you would like to filter for", value=0)
+        # Button to trigger processing
+        plot_foldchange = st.button("Plot species with fold change x")
+        if plot_foldchange:
+            filtered_columns = []
+            for column in df.columns[1:]:
+                initial_value = df[column].iloc[t0]
+                final_value = df[column].iloc[tf]
+                min_value = min(initial_value, final_value)
+                max_value = max(initial_value, final_value)
+                if abs(max_value - min_value) > input_foldchange * min_value:
+                    filtered_columns.append(column)
+            st.write(df[filtered_columns])
+            fig = px.line(df, 'Time', filtered_columns)
+            fig.update_layout(title=f"Plot of species with fold change greater than {input_foldchange}",xaxis_title='Time', yaxis_title='Concentration (uM)')
+            st.plotly_chart(fig)
+    else:
+        st.write("Load model first")
+
+
+def tab6_plot_titration():
+    st.header("Titration Plot")
+    st.write("Please fill out information below. The button will rerun solving the model for varying concentration ranges of the species selected and show a plot.")
+    st.divider()
+    if "df" in st.session_state and "uploaded_file" in st.session_state:
+        df = st.session_state.df
+        uploaded_file = st.session_state.uploaded_file
+        model_load = st.session_state.model_load
+        selected_option = st.session_state.selected_option
+        t0 = st.session_state.t0
+        tf = st.session_state.tf
+        steps = st.session_state.steps
+        #user select which species to vary
+        species = st.selectbox('Species to titrate:', options=df.columns[1:].tolist())
+        titration_conc = st.number_input("Enter the range of titrations you want, 0 to this value (in steps of 1)", value=0)
+        init_conc = df[species].iloc[t0]
+        st.write(f"The initial concentration of {species} was {init_conc}")
+
+        # Button to trigger processing
+        plot_titration = st.button("Plot titration")
+        if plot_titration:
+            file_name = uploaded_file.name
+            titration_df = titration_plot(file_name, species, titration_conc, t0, tf, steps, selected_option)
+            st.write(titration_df)
+    
+            # Get the names of species for the legend
+            headings = titration_df.columns[1:]
+            # Create figure with Plotly Express
+            fig = px.line(titration_df, x='Time', y=headings, title=species + ' Titration')
+            # Update axis labels
+            fig.update_xaxes(title_text='Time (s)')
+            fig.update_yaxes(title_text='Concentration (uM)')
+            st.plotly_chart(fig)
+    else:
+        st.write("Load model first")
 
 
 
@@ -201,13 +264,17 @@ def main():
         st.header("Plotting simulation results")
         st.write("To visualize your results, the Plot all tab will show the changing concentrations (in mM) of all compounds against time (in seconds). The second tab, Plot Selected, allows you to select your X- and Y-axis contents, and define a plot title and labels. Each plot can be downloaded and saved as a PNG file.")
         st.divider()
-        sub_tabs = ["Plot all", "Plot selected"]
+        sub_tabs = ["Plot all", "Plot selected", "Plot fold change", "Plot titration"]
         with st.expander("Select Page"):
             selected_sub_tab = st.radio("", sub_tabs, index=0)
             if selected_sub_tab == "Plot all": 
                 tab3_plot_all()
             elif selected_sub_tab == "Plot selected":
                 tab4_plot_selected()
+            elif selected_sub_tab == "Plot fold change":
+                tab5_plot_foldchange()
+            elif selected_sub_tab == "Plot titration":
+                tab6_plot_titration()
 
 if __name__ == "__main__":
     main()
