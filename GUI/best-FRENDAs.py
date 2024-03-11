@@ -29,8 +29,7 @@ def tab1_upload_model():
         file_content = uploaded_file.read()
         #running function
         model_load = load_model(file_content, selected_option)
-        st.write("Success!!!!!!! File contents:")
-        st.write(model_load)
+        st.write("Success!!!!!!!")
 
         # Stores model in session state of GUI, as well as uploaded file and selection choice
         st.session_state.uploaded_file = uploaded_file
@@ -171,20 +170,16 @@ def tab5_plot_foldchange():
     if "df" in st.session_state:
         #pulling session state variables
         df = st.session_state.df
-        t0 = st.session_state.t0
-        tf = st.session_state.tf
         # user input: fold change value
         input_foldchange = st.number_input("Enter the foldchange you would like to filter for", value=0)
         # Button to trigger processing
-        plot_foldchange = st.button("Plot species with fold change x")
+        plot_foldchange = st.button(f"Plot species with fold change {input_foldchange}")
         #checking absolute value of min value vs. max value difference, compared to the min value
         if plot_foldchange:
             filtered_columns = []
             for column in df.columns[1:]:
-                initial_value = df[column].iloc[t0]
-                final_value = df[column].iloc[tf]
-                min_value = min(initial_value, final_value)
-                max_value = max(initial_value, final_value)
+                min_value = min(df[column])
+                max_value = max(df[column])
                 if abs(max_value - min_value) > input_foldchange * min_value:
                     filtered_columns.append(column)
             st.write(df[filtered_columns])
@@ -211,23 +206,27 @@ def tab6_plot_titration():
         steps = st.session_state.steps
         # user input: species concentration variation
         species = st.selectbox('Species to titrate:', options=df.columns[1:].tolist())
-        titration_conc = st.number_input("Enter the range of titrations you want, 0 to this value (in steps of 1)", value=0)
+        init_titration_conc = st.number_input("Enter the titration concentration range start value", value=0)
+        titration_conc = st.number_input("Enter the titration concentration range end value (will progress in steps of 1)", value=0)
         init_conc = df[species].iloc[t0]
         st.write(f"The initial concentration of {species} was {init_conc}")
 
         # Button to trigger processing
         plot_titration = st.button("Plot titration")
         if plot_titration:
-            file_name = uploaded_file.name
-            #running function
-            titration_df = titration_plot(uploaded_file, species, titration_conc, t0, tf, steps, selected_option)
-            st.write(titration_df)
-            #plot
-            headings = titration_df.columns[1:]
-            fig = px.line(titration_df, x='Time', y=headings, title=species + ' Titration')
-            fig.update_xaxes(title_text='Time (s)')
-            fig.update_yaxes(title_text='Concentration (uM)')
-            st.plotly_chart(fig)
+            if init_titration_conc >= titration_conc:
+                st.error("make sure the range end is greater than the range start")
+            else: 
+                file_name = uploaded_file.name
+                #running function
+                titration_df = titration_plot(uploaded_file, species, init_titration_conc, titration_conc, t0, tf, steps, selected_option)
+                st.write(titration_df)
+                #plot
+                headings = titration_df.columns[1:]
+                fig = px.line(titration_df, x='Time', y=headings, title=species + ' Titration')
+                fig.update_xaxes(title_text='Time (s)')
+                fig.update_yaxes(title_text='Concentration (uM)')
+                st.plotly_chart(fig)
     else:
         st.write("Load model first")
 

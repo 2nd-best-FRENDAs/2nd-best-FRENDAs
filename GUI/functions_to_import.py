@@ -32,7 +32,7 @@ def simulate_model(model_load, t0, tf, steps):
     return solved_df
 
 # titration plot
-def titration_plot(uploaded_file, species, titration_conc, t0, tf, steps, selected_option):
+def titration_plot(uploaded_file, species, init_titration_conc, titration_conc, t0, tf, steps, selected_option):
     """ 
     file_name: .txt, .csv, biomodels website
     species: name of species to be titrated in str format (must match the name of a species in the input file)
@@ -46,10 +46,12 @@ def titration_plot(uploaded_file, species, titration_conc, t0, tf, steps, select
     species_edit = species + '='
     # Create empty dataframe to be populated with concentrations
     titration_df = pd.DataFrame()
-    titration_conc_list = list(range(titration_conc))
+    #adding one so that the range is inclusive
+    titration_conc_shift = titration_conc + 1
+    titration_conc_list = list(range(titration_conc_shift))
     
     # for each titration value
-    for i in range(0, titration_conc):
+    for i in range(init_titration_conc, titration_conc_shift):
         counter = 0
         # Create temp model file with specified change to concentrations
         # Open input file in readlines compatible text form
@@ -81,7 +83,7 @@ def titration_plot(uploaded_file, species, titration_conc, t0, tf, steps, select
             # Simulate and assign variables to temp model
             df_temp = simulate_model(temp_model, t0, tf, steps)
             # Copy the 'Time' column in the first iteration
-            if i == 0:
+            if i == init_titration_conc:
                 titration_df['Time'] = df_temp['Time']
             # Add the concentrations of the specified species into the dataframe as a new column
             titration_df[species + ' = ' + str(titration_conc_list[i])]  = df_temp[species]
