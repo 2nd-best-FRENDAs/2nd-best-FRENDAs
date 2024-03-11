@@ -24,7 +24,7 @@ Then, whenever you want to activate the environment, execute the following line:
 
 Finally, 2nd-best-FRENDA can be activated by executing the following line:
 
-    streamlit run gui_callfunctions.py
+    streamlit run best-FRENDAs.py
 
 ## Example:
 
@@ -46,3 +46,15 @@ A subset can also be visualized on the plot selected tab.
 
 ![plot_selected](https://github.com/best-FRENDAs/2nd-best-FRENDAs/blob/main/pngs/model_visualize_subset_screenshot.png)
 
+A subset filtered by species that have a user-defined amount of fold change can also be plotted on the fold change tab.
+
+![plot_foldchange](https://github.com/best-FRENDAs/2nd-best-FRENDAs/blob/main/pngs/foldchange_screenshot.png)
+
+Lastly, the model can be rerun through 2nd-best-FRENDAs with input changes. On the titration tab, one species' initial concentration can be modified, and the output plot will be its behavior over time for a range of concentrations.
+![plot_titration](https://github.com/best-FRENDAs/2nd-best-FRENDAs/blob/main/pngs/titration_screenshot.png)
+
+## Current known issues:
+- Solving the model is set so that the button to solve can only be clicked once, unless a time input is changed. However, when it is rerun with an altered input, the output is incorrect because it runs off of something that is not the original input.
+
+## Future additions:
+- 2nd-best-FRENDAs allows for fast, customizable, solving of different models. It could be expanded to allow for changes to multiple species, more specific concentration changes or titrations (such as the range and step value), single value replacements, and more. 

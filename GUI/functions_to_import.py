@@ -101,7 +101,7 @@ def titration_plot(file_name, species, titration_conc, t0, tf, steps, selected_o
             with open('temp_model.txt', 'w') as temp_file:
                 temp_file.writelines(modified_lines)
             #temp_model = load_model(temp_file, selected_option)
-
+    
             temp_model_sbml = te.antimonyToSBML('temp_model.txt')
             temp_model = te.loadSBMLModel(temp_model_sbml)
             # Simulate and assign variables to temp model
