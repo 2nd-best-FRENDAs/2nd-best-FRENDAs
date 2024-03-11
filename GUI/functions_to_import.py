@@ -2,6 +2,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import io
 import pandas as pd
 import tellurium as te
 
@@ -56,7 +57,7 @@ def export_csv(model):
     return
 
 #titration plot
-def titration_plot(file_name, species, titration_conc, t0, tf, steps, selected_option):
+def titration_plot(uploaded_file, species, titration_conc, t0, tf, steps, selected_option):
     """ 
     file_name: .txt, .csv, biomodels website
     species: name of species to be titrated in str format (must match the name of a species in the input file)
@@ -76,8 +77,9 @@ def titration_plot(file_name, species, titration_conc, t0, tf, steps, selected_o
     for i in range(0, titration_conc):
         counter = 0
         # Create temp model file with specified change to concentrations
-        # Open input file in "read mode"
-        with open(file_name, 'r') as file:
+        # Open input file in readlines compatible text form
+        file_object = io.BytesIO(uploaded_file.getvalue())
+        with io.TextIOWrapper(file_object, encoding='utf-8', errors='ignore') as file:
             lines = file.readlines()
             # Create empty list that will contain all lines in the .txt
             modified_lines = []

@@ -221,7 +221,7 @@ def tab6_plot_titration():
         plot_titration = st.button("Plot titration")
         if plot_titration:
             file_name = uploaded_file.name
-            titration_df = titration_plot(file_name, species, titration_conc, t0, tf, steps, selected_option)
+            titration_df = titration_plot(uploaded_file, species, titration_conc, t0, tf, steps, selected_option)
             st.write(titration_df)
     
             # Get the names of species for the legend
