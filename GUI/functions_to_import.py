@@ -1,14 +1,13 @@
-from datetime import datetime
+import datetime
+import io
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
-import os
-import io
 import pandas as pd
 import tellurium as te
 
-
-# Load file and convert to SBML
-        # If file is in SBML, function will still load the model
+# Load file and convert to SBML format, if file is in SBML, function will still load the model
 def load_model(file_content, selected_option): 
     """ 
     file_name: .txt, .csv, biomodels website
@@ -18,45 +17,37 @@ def load_model(file_content, selected_option):
     Output declares whether file was successfully loaded or not
     """
     if selected_option=='antimony':
-        try:
-            model_sbml = te.antimonyToSBML(file_content)
-            model_load = te.loadSBMLModel(model_sbml)
-            print(f"Successfully converted file from {selected_option} to SBML and loaded.")
-        except Exception as e:
-            print("Could not load file.", e)
+        #tellurium converstion functions
+        model_sbml = te.antimonyToSBML(file_content)
+        model_load = te.loadSBMLModel(model_sbml)
     else: 
-        try:
-            model_load = te.loadSBMLModel(file_content)
-            print(f"Successfully loaded SBML file.")
-        except Exception as e:
-            print("Could not load SBML file.", e)
+        model_load = te.loadSBMLModel(file_content)
     return model_load
 
-#solve model in tellurium
+# solve model in tellurium
 def simulate_model(model_load, t0, tf, steps):
-    # simulate based on time interval and time steps
+    #simulate based on time interval and time steps
     result = model_load.simulate(t0, tf, steps) 
-    # Convert to DataFrame
+    #convert to dataframe
     species_names = model_load.getFloatingSpeciesIds()
     columns = ['Time'] + [str(i) for i in species_names]
     solved_df = pd.DataFrame(data=result, columns=columns)
-    #only returning one thing right now to integrate into gui
     return solved_df
 
-#export csv
+# export csv
 def export_csv(model):
     """
     Takes a solved model and exports it as a .csv in the same folder as the code.
     Appends the date and time to the beginning of the file name so repeats are not created.
     """
-    # Grab current time and date, make variable to display date
+    #grab current time and date, make variable to display date
     now = datetime.now()
     current_time = now.strftime("%Y%m%d_%H.%M.%S")
-    # Save DataFrame to .csv
+    #dataframe to csv
     model.to_csv(current_time + ' simulation_data.csv', index=False)
     return
 
-#titration plot
+# titration plot
 def titration_plot(uploaded_file, species, titration_conc, t0, tf, steps, selected_option):
     """ 
     file_name: .txt, .csv, biomodels website
@@ -98,21 +89,16 @@ def titration_plot(uploaded_file, species, titration_conc, t0, tf, steps, select
                 if len(modified_lines) == counter:
                     modified_lines.append(line)  
                 counter += 1
-            
             # Create a new file temp_model.txt in "write mode" and write out the modified lines
             with open('temp_model.txt', 'w') as temp_file:
                 temp_file.writelines(modified_lines)
-            #temp_model = load_model(temp_file, selected_option)
-    
             temp_model_sbml = te.antimonyToSBML('temp_model.txt')
             temp_model = te.loadSBMLModel(temp_model_sbml)
             # Simulate and assign variables to temp model
             df_temp = simulate_model(temp_model, t0, tf, steps)
-            
             # Copy the 'Time' column in the first iteration
             if i == 0:
                 titration_df['Time'] = df_temp['Time']
-        
             # Add the concentrations of the specified species into the dataframe as a new column
             titration_df[species + ' = ' + str(titration_conc_list[i])]  = df_temp[species]
     os.remove('temp_model.txt')

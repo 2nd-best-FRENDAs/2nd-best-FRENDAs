@@ -55,6 +55,7 @@ Lastly, the model can be rerun through 2nd-best-FRENDAs with input changes. On t
 
 ## Current known issues:
 - Solving the model is set so that the button to solve can only be clicked once, unless a time input is changed. However, when it is rerun with an altered input, the output is incorrect because it runs off of something that is not the original input.
+- The titration plot code has not been adapted to work with files that are uploaded in SBML format.
 
 ## Future additions:
 - 2nd-best-FRENDAs allows for fast, customizable, solving of different models. It could be expanded to allow for changes to multiple species, more specific concentration changes or titrations (such as the range and step value), single value replacements, and more.
