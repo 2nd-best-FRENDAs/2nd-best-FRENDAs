@@ -57,4 +57,5 @@ Lastly, the model can be rerun through 2nd-best-FRENDAs with input changes. On t
 - Solving the model is set so that the button to solve can only be clicked once, unless a time input is changed. However, when it is rerun with an altered input, the output is incorrect because it runs off of something that is not the original input.
 
 ## Future additions:
-- 2nd-best-FRENDAs allows for fast, customizable, solving of different models. It could be expanded to allow for changes to multiple species, more specific concentration changes or titrations (such as the range and step value), single value replacements, and more. 
+- 2nd-best-FRENDAs allows for fast, customizable, solving of different models. It could be expanded to allow for changes to multiple species, more specific concentration changes or titrations (such as the range and step value), single value replacements, and more.
+    - part of this function has been written, see *modify_sim(filename, species_to_edit, new_concentrations)*, but it is not integrated into the GUI yet.
