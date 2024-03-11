@@ -1,9 +1,6 @@
-import datetime
 import io
 import os
 
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import tellurium as te
 
@@ -33,19 +30,6 @@ def simulate_model(model_load, t0, tf, steps):
     columns = ['Time'] + [str(i) for i in species_names]
     solved_df = pd.DataFrame(data=result, columns=columns)
     return solved_df
-
-# export csv
-def export_csv(model):
-    """
-    Takes a solved model and exports it as a .csv in the same folder as the code.
-    Appends the date and time to the beginning of the file name so repeats are not created.
-    """
-    #grab current time and date, make variable to display date
-    now = datetime.now()
-    current_time = now.strftime("%Y%m%d_%H.%M.%S")
-    #dataframe to csv
-    model.to_csv(current_time + ' simulation_data.csv', index=False)
-    return
 
 # titration plot
 def titration_plot(uploaded_file, species, titration_conc, t0, tf, steps, selected_option):

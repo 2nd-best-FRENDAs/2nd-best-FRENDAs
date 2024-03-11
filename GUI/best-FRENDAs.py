@@ -1,15 +1,8 @@
 import base64
-import os
-
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
 
 import plotly.express as px
-import plotly.graph_objs as go
 
 import streamlit as st
-import tellurium as te
 
 from functions_to_import import load_model, simulate_model, titration_plot
 
@@ -104,7 +97,7 @@ def tab2_solve_model():
 
     # Button to download the DataFrame as a CSV file
     if st.button("Download CSV"):
-        # Create a link to download the CSV file
+        # Create a link to download file
         if "df" in st.session_state:
             try:
                 df = st.session_state.df
