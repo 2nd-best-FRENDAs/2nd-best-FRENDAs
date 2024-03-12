@@ -7,6 +7,7 @@ import unittest
 import antimony
 import pandas as pd
 from unittest.mock import MagicMock
+import io
 
 import tellurium as te
 
@@ -81,16 +82,32 @@ class TestSimulateModel(unittest.TestCase):
 
 
 class TestTitrationPlot(unittest.TestCase):
-    
-    def test_titration_plot_shape(self):
-        '''Test that output shape matches expected for basic_enzyme_model, adjusting titration 3 steps'''
-        
-        # positional argument needed on streamlit but not here. Inputting none
-        selected_option = None
 
-        test_titration_df = titration_plot(basic_model, 'S1', 0, 5, 0, 5, 6, selected_option)
+    def test_titration_plot_basic(self):
+        # Test when basic parameters are provided
+        with open('basic_model.txt', 'rb') as file:
+            file_content = file.read()
 
-        #print(test_titration_df.shape)
+        # Test when basic parameters are provided
+        uploaded_file = io.BytesIO(file_content)
+        species = "S1"
+        init_titration_conc = 0
+        titration_conc = 2
+        t0 = 0
+        tf = 10
+        steps = 100
+        selected_option = "sbml"
+
+        result_df = titration_plot(uploaded_file, species, init_titration_conc, titration_conc, t0, tf, steps, selected_option)
+
+        self.assertIsInstance(result_df, pd.DataFrame)
+        self.assertIn('Time', result_df.columns)
+        self.assertIn('S1 = 0', result_df.columns)
+        self.assertIn('S1 = 1', result_df.columns)
+        self.assertIn('S1 = 2', result_df.columns)
+
+        self.assertEqual(result_df.shape, (100, 4))
+
 
 
 if __name__ == '__main__':
