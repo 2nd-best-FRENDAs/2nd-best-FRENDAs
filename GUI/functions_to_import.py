@@ -7,11 +7,10 @@ import tellurium as te
 # Load file and convert to SBML format, if file is in SBML, function will still load the model
 def load_model(file_content, selected_option): 
     """ 
-    file_name: .txt, .csv, biomodels website
-    selected_option: ant, sbml
+    file_name: .txt for antimony, .xml for smbl
+    selected_option: antimony, sbml
     
     Input the file_name/path of the file, and its syntax.
-    Output declares whether file was successfully loaded or not
     """
     if selected_option=='antimony':
         #tellurium converstion functions
