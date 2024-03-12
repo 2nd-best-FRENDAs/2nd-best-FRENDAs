@@ -24,7 +24,7 @@ Then, whenever you want to activate the environment, execute the following line:
 
 Finally, 2nd-best-FRENDA can be activated by executing the following line:
 
-    streamlit run best-FRENDAs.py
+    streamlit run best_FRENDAs.py
 
 ## Example:
 
