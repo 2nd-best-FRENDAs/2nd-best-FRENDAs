@@ -6,8 +6,6 @@ import pandas as pd
 # Import the function you want to test
 from best_FRENDAs import *
 
-'''To do - unittests for all functions in best_FRENDAs'''
-
 class TestTab1UploadModel(unittest.TestCase):
 
     def test_tab1_upload_model_no_file(self):
@@ -31,7 +29,6 @@ class TestTab1UploadModel(unittest.TestCase):
                 # Assert that the error message is displayed
                 mock_error.assert_called_with("Invalid format, please upload a .txt or .csv file")
 
-    # Add more test cases as needed
 
 class TestTab2SolveModel(unittest.TestCase):
 
@@ -99,7 +96,6 @@ class TestTab5PlotFoldChange(unittest.TestCase):
                 tab5_plot_foldchange()
                 mock_write.assert_called_with("Load model first")
 
-    # Add more test cases as needed
 
 class TestTab6PlotTitration(unittest.TestCase):
 
