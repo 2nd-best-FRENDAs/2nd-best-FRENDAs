@@ -60,3 +60,4 @@ Lastly, the model can be rerun through 2nd-best-FRENDAs with input changes. On t
 ## Future additions:
 - 2nd-best-FRENDAs allows for fast, customizable, solving of different models. It could be expanded to allow for changes to multiple species, more specific concentration changes or titrations (such as the range and step value), single value replacements, and more.
     - part of this function has been written, see *modify_sim(filename, species_to_edit, new_concentrations)*, but it is not integrated into the GUI yet.
+- Escher, and metabolic map overlay functionality in general, could be a helpful addition to exploring synthetic metabolic models. However, escher is not intended for synthetic pathway models unless maps are predrawn. A future aspect could be automating the creation of maps fed into escher for synthetic pathways, or exploring other tools such as cobrapy. Initial efforts implementing NetworkX are available in the escher folder.
