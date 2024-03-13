@@ -1,5 +1,5 @@
 ''' This script contains test functions for function_to_import.py. These are written as unittests
-Make sure multi_enzyme_model.txt is in same directory
+Make sure basic_model.txt and multi_enzyme_model.txt are in same directory
 '''
 
 from io import BytesIO
