@@ -117,12 +117,12 @@ def tab3_plot_all():
     Takes output dataframe, stored in session state, and plots concentration.
     """
     st.header("Plotting All Data")
-    st.write("Below is your plot of all metabolite and enzyme concentrations (in mM) against your specified time interval (in seconds).")
+    st.write("Below is your plot of all metabolite and enzyme concentrations (in µM) against your specified time interval (in seconds).")
     if "df" in st.session_state:
         df = st.session_state.df
         try:
             fig = px.line(df, x=df.columns[0], y=df.columns[1:], title='Time Series Data')
-            fig.update_layout(xaxis_title="Time (seconds)", yaxis_title="Concentration (mM)")
+            fig.update_layout(xaxis_title="Time (seconds)", yaxis_title="Concentration (µM)")
             st.plotly_chart(fig)
         except Exception as e:
             st.error(f"An error occurred: {e}")
@@ -135,7 +135,7 @@ def tab4_plot_selected():
     User defines plot title, and x- and y-labels.
     """
     st.header("Customizable Plot")
-    st.write("Please fill out information below. Then, a specified plot of metabolite and enzyme concentrations (in mM) against your specified time interval (in seconds) will appear.")
+    st.write("Please fill out information below. Then, a specified plot of metabolite and enzyme concentrations (in µM) against your specified time interval (in seconds) will appear.")
     st.divider()
     if "df" in st.session_state:
         df = st.session_state.df
@@ -165,7 +165,7 @@ def tab4_plot_selected():
 
 def tab5_plot_foldchange():
     st.header("Plot species with selected fold change")
-    st.write("Please fill out information below. Then, a specified plot species with a fold change greater than specified will appear.")
+    st.write("Please fill out information below. Then, a specified plot species with a fold change in concentration greater than specified will appear. This enables visualization of species affecting metabolic flux of the pathway the most significantly.")
     st.divider()
     if "df" in st.session_state:
         #pulling session state variables
@@ -225,7 +225,7 @@ def tab6_plot_titration():
                 headings = titration_df.columns[1:]
                 fig = px.line(titration_df, x='Time', y=headings, title=species + ' Titration')
                 fig.update_xaxes(title_text='Time (s)')
-                fig.update_yaxes(title_text='Concentration (uM)')
+                fig.update_yaxes(title_text='Concentration (µM)')
                 st.plotly_chart(fig)
     else:
         st.write("Load model first")
@@ -254,7 +254,7 @@ def main():
     # Tab 3: Plotting model
     with tab3:
         st.header("Plotting simulation results")
-        st.write("To visualize your results, the Plot all tab will show the changing concentrations (in mM) of all compounds against time (in seconds). The second tab, Plot Selected, allows you to select your X- and Y-axis contents, and define a plot title and labels. Each plot can be downloaded and saved as a PNG file.")
+        st.write("To visualize your results, the Plot all tab will show the changing concentrations (in µM) of all compounds against time (in seconds). The second tab, Plot Selected, allows you to select your X- and Y-axis contents, and define a plot title and labels. Each plot can be downloaded and saved as a PNG file.")
         st.divider()
         sub_tabs = ["Plot all", "Plot selected", "Plot fold change", "Plot titration"]
         with st.expander("Select Page"):
